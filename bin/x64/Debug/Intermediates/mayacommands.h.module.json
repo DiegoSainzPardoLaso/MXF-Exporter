@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "C:\\ScriptsMAYA\\cpp\\MOF_Plugin\\MOF_Exporter\\bin\\x64\\Debug\\Intermediates\\MayaCommands.h.obj",
+            "outputs": [
+                "C:\\ScriptsMAYA\\cpp\\MOF_Plugin\\MOF_Exporter\\bin\\x64\\Debug\\Intermediates\\vc143.pdb",
+                "C:\\ScriptsMAYA\\cpp\\MOF_Plugin\\MOF_Exporter\\bin\\x64\\Debug\\Intermediates\\",
+                "C:\\ScriptsMAYA\\cpp\\MOF_Plugin\\MOF_Exporter\\bin\\x64\\Debug\\Intermediates\\MayaCommands.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "src\\MayaCommands.h",
+                    "source-path": "c:\\scriptsmaya\\cpp\\mof_plugin\\mof_exporter\\src\\mayacommands.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

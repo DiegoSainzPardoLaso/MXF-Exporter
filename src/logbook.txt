@@ -1,0 +1,9 @@
+// @todo Rotation retrievement is wrong!!!
+
+// @todo The way im doing this, it only gathers joints/bones that are directly affecting the mes
+	// so joints that have influence over it. The root isnt supposed to have any direct influence 
+	// over the mesh, but I needed so. Im gonna have a reference to the root node store somewhere
+	// Maybe when retrieving the first node with any influence, which hierarchically is the nearest
+	// one to the root... Maybe do that? 
+	// Another solution, would be that the root joint had a really tiny tiny influence over some vertex??? Nah
+	
