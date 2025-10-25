@@ -43,49 +43,78 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 	MFnIkJoint     root(rootObj.rootObj);	
 	MTime          endFrame;
 	Print(root.childCount());
-	endFrame = MAnimControl::animationEndTime();
+	endFrame = MAnimControl::animationEndTime() + 1;
 
-	if (!format.compare("Binary"))
+	int jointCount = finalJoints.size() + 1;						 
+	int frameCount = finalJoints[0].transformPerFrame.size(); 
+	int frameRate  = GetFrameRate();
+
+
+
+	if (!format.compare("Binary")) 
 	{
+
 		file.open(path, std::ios::out | std::ios::binary);
+
+		file.write(reinterpret_cast<char*>(&jointCount), sizeof(int));
+		file.write(reinterpret_cast<char*>(&frameCount), sizeof(int));
+		file.write(reinterpret_cast<char*>(&frameRate), sizeof(int));
+	
+		// ===========================================================================
+		// Gather the root joint transform information
+		std::vector<JointTransform> rootTransforms{};
+		for (size_t i = 0; i < frameCount; i++)
+		{
+			JointTransform rootTransform;
+			MAF_Helper::GetTransformInFrameX(root, rootTransform, i);
+			rootTransforms.emplace_back(rootTransform);
+		}
+		// ===========================================================================
+					
+		// ===========================================================================
+		// Serialize
+		//
+		for (unsigned int fI = 0; fI < frameCount; fI++)
+		{		
+			// The root always first
+			SerializeJointFrameTransform(file, rootTransforms[frameCount]);
+
+			for (unsigned int jI = 0; jI < finalJoints.size(); jI++)
+			{
+				// And then each joint
+				SerializeJointFrameTransform(file, finalJoints[jI].transformPerFrame[fI]);
+			}
+		}
+		// ===========================================================================
 	}
 	else
 	{
 		file.open(path, std::ios::out);		 
 
-		file << "Joint Count [ " << finalJoints.size() + 1 << " ] \n"; // @note +1 the root
-		file << "Frame Count [ " << finalJoints[0].transformPerFrame.size() - 1 << " ] \n";
-		file << "Frame Rate  [ " << GetFrameRate() << " ] \n";
-		
+		file << "Joint Count [ " << jointCount << " ] \n"; 
+		file << "Frame Count [ " << frameCount << " ] \n";
+		file << "Frame Rate  [ " << frameRate  << " ] \n";					
 
-		file << "Root: " << root.name() << " [ -1 ] --- PARENT IDX [ -1 ]" << "\n{\n";
-		for (unsigned int rootFrameIdx = 0; rootFrameIdx < endFrame.value(); rootFrameIdx++)
-		{
-			JointTransform transform{};
-			MAF_Helper::GetTransform(root, transform);
-		 
-		 	file << "\tFrame " << rootFrameIdx << "\n\t{\n";
-		 	file << "\t\tPosition [ " << transform.position.x << ", " << transform.position.y << ", " << transform.position.z << " ]\n";			 
+		for (unsigned int cFrame = 0; cFrame < endFrame.value(); cFrame++)
+		{			
+			file << "Frame " << cFrame << "\n{\n";
+
+			JointTransform transform;
+			MAF_Helper::GetTransformInFrameX(root, transform, cFrame);
+
+			file << "\n\t{\n";
+			file << "\t\tPosition [ " << transform.position.x << ", " << transform.position.y << ", " << transform.position.z << " ]\n";
 			file << "\t\tRotation [ " << transform.rotation.x << ", " << transform.rotation.y << ", " << transform.rotation.z << ", " << transform.rotation.w << " ]\n";
-		 	// file << "\t\tOrientation [ " << transform.eulerRotation.x << ", " << transform.eulerRotation.y << ", " << transform.eulerRotation.z << " ] <-- Euler (Radians)\n";
-		 	// file << "\t\tOrientation [ " << transform.eulerRotation.x * (180 / (float)3.1415926535f) << ", " << transform.eulerRotation.y * (180 / (float)3.1415926535f) << ", " << transform.eulerRotation.z * (180 / (float)3.1415926535f) << " ] <-- Euler (Degrees)\n";
-		 	file << "\t\tScale	 [ " << transform.scale.x << ", " << transform.scale.y << ", " << transform.scale.z << " ]\n";
-		 	file << "\t\tShear	 [ " << transform.shear.x << ", " << transform.shear.y << ", " << transform.shear.z << " ]\n";
-		 	file << "\t} \n";
-		}
+			// file << "\t\tRotation [ " << transform.eulerRotation.x << ", " << transform.eulerRotation.y << ", " << transform.eulerRotation.z << " ] <-- Euler (Radians)\n";
+			// file << "\t\tRotation [ " << transform.eulerRotation.x * (180 / (float)3.1415926535f) << ", " << transform.eulerRotation.y * (180 / (float)3.1415926535f) << ", " << transform.eulerRotation.z * (180 / (float)3.1415926535f) << " ] <-- Euler (Degrees)\n";
+			file << "\t\tScale    [ " << transform.scale.x << ", " << transform.scale.y << ", " << transform.scale.z << " ]\n";
+			file << "\t\tShear    [ " << transform.shear.x << ", " << transform.shear.y << ", " << transform.shear.z << " ]\n";
+			file << "\t} \n";
 
-		file << "} \n";
-
-
-		for (unsigned int jointIdx = 0; jointIdx < finalJoints.size(); jointIdx++)
-		{
-			file << "Joint: " << finalJoints[jointIdx].name << " [" << jointIdx << "] --- PARENT IDX [ " << finalJoints[jointIdx].parentID << " ]\n{\n";		
-			
-			for (unsigned int cFrame = 0; cFrame < endFrame.value(); cFrame++)
+			for (unsigned int jointIdx = 0; jointIdx < finalJoints.size(); jointIdx++)
 			{
 				JointTransform transform = finalJoints[jointIdx].transformPerFrame[cFrame];
-
-				file << "\tFrame " << cFrame << "\n\t{\n";
+				file << "\n\t{\n";
 				file << "\t\tPosition [ " << transform.position.x << ", " << transform.position.y << ", " << transform.position.z << " ]\n";								
 				file << "\t\tRotation [ " << transform.rotation.x << ", " << transform.rotation.y << ", " << transform.rotation.z << ", " << transform.rotation.w << " ]\n";
 				// file << "\t\tRotation [ " << transform.eulerRotation.x << ", " << transform.eulerRotation.y << ", " << transform.eulerRotation.z << " ] <-- Euler (Radians)\n";
@@ -95,7 +124,7 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 				file << "\t} \n";
 			}
 
-			file << "} \n";
+			file << "} \n\n";
 		}		
 	}
 
@@ -103,4 +132,36 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 	return MStatus::kSuccess;
 }
 
- 
+
+void MAF_Generator::SerializeJointFrameTransform(std::fstream& file, JointTransform& transform)
+{	
+	float posX = transform.position.x;
+	float posY = transform.position.y;
+	float posZ = transform.position.z;
+	file.write(reinterpret_cast<const char*>(&posX), sizeof(float));
+	file.write(reinterpret_cast<const char*>(&posY), sizeof(float));
+	file.write(reinterpret_cast<const char*>(&posZ), sizeof(float));
+
+	float rotX = transform.rotation.x;
+	float rotY = transform.rotation.y;
+	float rotZ = transform.rotation.z;
+	float rotW = transform.rotation.w;
+	file.write(reinterpret_cast<const char*>(&rotX), sizeof(float));
+	file.write(reinterpret_cast<const char*>(&rotY), sizeof(float));
+	file.write(reinterpret_cast<const char*>(&rotZ), sizeof(float));
+	file.write(reinterpret_cast<const char*>(&rotW), sizeof(float));		
+
+	float scaX = transform.scale.x;
+	float scaY = transform.scale.y;
+	float scaZ = transform.scale.z;		
+	file.write(reinterpret_cast<const char*>(&scaX), sizeof(float));		
+	file.write(reinterpret_cast<const char*>(&scaY), sizeof(float));		
+	file.write(reinterpret_cast<const char*>(&scaZ), sizeof(float));		
+
+	float shrX = transform.shear.x;
+	float shrY = transform.shear.y;
+	float shrZ = transform.shear.z;	
+	file.write(reinterpret_cast<const char*>(&shrX), sizeof(float));		
+	file.write(reinterpret_cast<const char*>(&shrY), sizeof(float));		
+	file.write(reinterpret_cast<const char*>(&shrZ), sizeof(float));
+}

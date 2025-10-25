@@ -22,4 +22,5 @@ namespace MAF_Helper
 	void	GetRootChildren(Root& root, std::vector<Joint>& finalJoints);
 	MStatus GetJointTransformationsOvertTheTimeline(std::vector<Joint>& finalJoints);
 	MStatus GetTransform(MFnIkJoint& joint, JointTransform& transform);
+	MStatus GetTransformInFrameX(MFnIkJoint& joint, JointTransform& transform, int x);
 }

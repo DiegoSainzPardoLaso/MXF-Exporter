@@ -216,3 +216,36 @@ MStatus MAF_Helper::GetTransform(MFnIkJoint& joint, JointTransform& transform)
 	
 	return status;
 }
+
+
+MStatus MAF_Helper::GetTransformInFrameX(MFnIkJoint& joint, JointTransform& transform, int x)
+{
+	MTime nTime;
+	nTime.setValue(x);
+
+	MAnimControl::setCurrentTime(nTime);
+	MStatus status;
+
+	transform.position = joint.getTranslation(MSpace::kTransform, &status);
+	if (status == MStatus::kFailure) { Print("Failed to retrieve position information."); }
+
+	status = joint.getRotation(transform.rotation);
+	if (status == MStatus::kFailure) { Print("Failed to retrieve Quaternion information."); }
+
+	status = joint.getRotation(transform.eulerRotation);
+	if (status == MStatus::kFailure) { Print("Failed to retrieve Euler information."); }
+
+	double scale[3];
+	status = joint.getScale(scale);
+	if (status == MStatus::kFailure) { Print("Failed to retrieve scale information."); }
+	MVector vScale(scale[0], scale[1], scale[2]);
+	transform.scale = vScale;
+
+	double shear[3];
+	status = joint.getShear(shear);
+	if (status == MStatus::kFailure) { Print("Failed to retrieve shear information."); }
+	MVector vShear(shear[0], shear[1], shear[2]);
+	transform.shear = vShear;
+
+	return status;
+}

@@ -407,8 +407,10 @@ void MOF_Generator::WriteJoint(std::fstream& file, Joint& joint)
 
     // IDs
     //
-    file.write(reinterpret_cast<char*>(&joint.influenceID + 1), sizeof(int));
-    file.write(reinterpret_cast<char*>(&joint.parentID    + 1), sizeof(int));
+    int ownId  = joint.influenceID + 1;
+    int parent = joint.parentID    + 1;
+    file.write(reinterpret_cast<char*>(&ownId),  sizeof(int));
+    file.write(reinterpret_cast<char*>(&parent), sizeof(int));
 
     // Childrens
     //
@@ -417,7 +419,8 @@ void MOF_Generator::WriteJoint(std::fstream& file, Joint& joint)
 
     for (unsigned int cI = 0; cI < childCount; cI++)
     {
-        file.write(reinterpret_cast<char*>(&joint.childrenIDs[cI]), sizeof(int));
+        int idx = joint.childrenIDs[cI] + 1;
+        file.write(reinterpret_cast<char*>(&idx), sizeof(int));
     }
 
     // Transform
@@ -479,7 +482,8 @@ void MOF_Generator::WriteRoot(std::fstream& file, Root& root)
 
     for (unsigned int cI = 0; cI < childCount; cI++)
     {
-        file.write(reinterpret_cast<char*>(&root.childrenIDs[cI]), sizeof(int));
+        int idx = root.childrenIDs[cI] + 1;
+        file.write(reinterpret_cast<char*>(&idx), sizeof(int));        
     }
 
     // Transform
