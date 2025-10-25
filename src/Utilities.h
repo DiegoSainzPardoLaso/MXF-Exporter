@@ -13,6 +13,14 @@ inline void Print(T t)
 	MGlobal::displayInfo(info);
 }
 
+template<typename T>
+inline void Print(MString message, T t)
+{	
+	message += t;
+	MGlobal::displayInfo(message);
+}
+
+
 
 inline MStatus Print(MString message, MStatus& status)
 {

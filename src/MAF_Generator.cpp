@@ -43,11 +43,11 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 	MFnIkJoint     root(rootObj.rootObj);	
 	MTime          endFrame;
 	Print(root.childCount());
-	endFrame = MAnimControl::animationEndTime() + 1;
+	endFrame = MAnimControl::animationEndTime();
 
-	int jointCount = finalJoints.size() + 1;						 
-	int frameCount = finalJoints[0].transformPerFrame.size(); 
-	int frameRate  = GetFrameRate();
+	int   jointCount = finalJoints.size() + 1;						 
+	int   frameCount = finalJoints[0].transformPerFrame.size(); 
+	float frameRate  = GetFrameRate();
 
 
 
@@ -58,26 +58,20 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 
 		file.write(reinterpret_cast<char*>(&jointCount), sizeof(int));
 		file.write(reinterpret_cast<char*>(&frameCount), sizeof(int));
-		file.write(reinterpret_cast<char*>(&frameRate), sizeof(int));
+		file.write(reinterpret_cast<char*>(&frameRate),  sizeof(float));
 	
-		// ===========================================================================
-		// Gather the root joint transform information
-		std::vector<JointTransform> rootTransforms{};
-		for (size_t i = 0; i < frameCount; i++)
-		{
-			JointTransform rootTransform;
-			MAF_Helper::GetTransformInFrameX(root, rootTransform, i);
-			rootTransforms.emplace_back(rootTransform);
-		}
-		// ===========================================================================
-					
+
 		// ===========================================================================
 		// Serialize
 		//
-		for (unsigned int fI = 0; fI < frameCount; fI++)
-		{		
+		for (unsigned int fI = 0; fI <= endFrame.value(); fI++)
+		{	
 			// The root always first
-			SerializeJointFrameTransform(file, rootTransforms[frameCount]);
+			JointTransform rootTransform;
+			MAF_Helper::GetTransformInFrameX(root, rootTransform, fI);
+			SerializeJointFrameTransform(file, rootTransform);
+
+			Print("Frame Error ", fI);
 
 			for (unsigned int jI = 0; jI < finalJoints.size(); jI++)
 			{
@@ -95,7 +89,7 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 		file << "Frame Count [ " << frameCount << " ] \n";
 		file << "Frame Rate  [ " << frameRate  << " ] \n";					
 
-		for (unsigned int cFrame = 0; cFrame < endFrame.value(); cFrame++)
+		for (unsigned int cFrame = 0; cFrame <= endFrame.value(); cFrame++)
 		{			
 			file << "Frame " << cFrame << "\n{\n";
 

@@ -1,31 +1,5 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(523,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
   No se pudo encontrar C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\bin\x64\Debug\MOF_Exporter.dll
-  MAF_Generator.cpp
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\Utilities.h(25,2): warning C4809: switch statement has redundant 'default' label; all possible 'case' labels are given
-  (compiling source file 'src/MAF_Generator.cpp')
-  
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\Types.h(101,54): warning C4305: 'argument': truncation from 'double' to 'float'
-  (compiling source file 'src/MAF_Generator.cpp')
-  
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(32,13): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(48,17): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(49,17): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(50,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(69,58): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(77,32): warning C4018: '<': signed/unsigned mismatch
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(138,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(139,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(140,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(145,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(146,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(147,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(148,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(154,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(155,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(156,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(161,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(162,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\src\MAF_Generator.cpp(163,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   LINK : C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\bin\x64\Debug\MOF_Exporter.dll not found or not built by the last incremental link; performing full link
      Creating library C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\bin\x64\Debug\MOF_Exporter.lib and object C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\bin\x64\Debug\MOF_Exporter.exp
   MOF_Exporter.vcxproj -> C:\ScriptsMAYA\cpp\MOF_Plugin\MOF_Exporter\bin\x64\Debug\MOF_Exporter.dll
