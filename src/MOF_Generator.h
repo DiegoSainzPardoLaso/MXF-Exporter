@@ -32,8 +32,8 @@ namespace MOF_Generator
 {		
 	MStatus ExportMesh(std::string& path, std::string& format, bool deduplicate);
 	void	WriteFile(std::vector<Vertex>& finalVertices, std::vector<int>& indices, std::vector<Joint> skeleton, Root& root, std::string& path, std::string& format, Type meshType);
-	void	WriteJoint(std::fstream& file, Joint& joint);
-	void	WriteRoot (std::fstream& file, Root& root);
+	void	WriteJoint(std::ofstream& file, Joint& joint);
+	void	WriteRoot (std::ofstream& file, Root& root);
 
 	template <typename T>
 	void Print(MString first, T fVal, MString second, T sVal, MString third, T tVal)

@@ -39,7 +39,7 @@ MStatus MAF_Generator::ExportAnimation(std::string& path, std::string& format, b
 
 MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& rootObj, std::vector<Joint>& finalJoints)
 {
-	std::fstream   file;
+	std::ofstream   file;
 	MFnIkJoint     root(rootObj.rootObj);	
 	MTime          endFrame;
 	Print(root.childCount());
@@ -66,20 +66,67 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 		//
 		for (unsigned int fI = 0; fI <= endFrame.value(); fI++)
 		{	
+			MString message = "Frame ";
+			message += fI;
+			MGlobal::displayError(message);
+
 			// The root always first
 			JointTransform rootTransform;
 			MAF_Helper::GetTransformInFrameX(root, rootTransform, fI);
 			SerializeJointFrameTransform(file, rootTransform);
-
-			Print("Frame Error ", fI);
-
+			 
+			// And then each joint
 			for (unsigned int jI = 0; jI < finalJoints.size(); jI++)
 			{
-				// And then each joint
-				SerializeJointFrameTransform(file, finalJoints[jI].transformPerFrame[fI]);
+				JointTransform transform;
+				MFnIkJoint j = finalJoints[jI].GetThisJoint();
+				MAF_Helper::GetTransformInFrameX(j, transform, fI);
+
+				float posX = (float)transform.position.x;
+				float posY = (float)transform.position.y;
+				float posZ = (float)transform.position.z;
+				
+				file.write(reinterpret_cast<char*>(&posX), sizeof(float));
+				file.write(reinterpret_cast<char*>(&posY), sizeof(float));
+				file.write(reinterpret_cast<char*>(&posZ), sizeof(float));
+
+			 
+				float rotX = transform.rotation.x;
+				float rotY = transform.rotation.y;
+				float rotZ = transform.rotation.z;
+				float rotW = transform.rotation.w;
+				// Print("Rotation ", rotX, rotY, rotZ);
+				file.write(reinterpret_cast<char*>(&rotX), sizeof(float));
+				file.write(reinterpret_cast<char*>(&rotY), sizeof(float));
+				file.write(reinterpret_cast<char*>(&rotZ), sizeof(float));
+				file.write(reinterpret_cast<char*>(&rotW), sizeof(float));
+		 
+				float scaX = (float)transform.scale.x;
+				float scaY = (float)transform.scale.y;
+				float scaZ = (float)transform.scale.z;
+				// Print("Scale ", scaX, scaY, scaZ);
+				file.write(reinterpret_cast<char*>(&scaX), sizeof(float));
+				file.write(reinterpret_cast<char*>(&scaY), sizeof(float));
+				file.write(reinterpret_cast<char*>(&scaZ), sizeof(float));
+
+				float shrX = (float)transform.shear.x;
+				float shrY = (float)transform.shear.y;
+				float shrZ = (float)transform.shear.z;
+				// Print("Shear ", shrX, shrY, shrZ);
+				file.write(reinterpret_cast<char*>(&shrX), sizeof(float));
+				file.write(reinterpret_cast<char*>(&shrY), sizeof(float));
+				file.write(reinterpret_cast<char*>(&shrZ), sizeof(float));
+
+
+				// SerializeJointFrameTransform(file, finalJoints[jI].transformPerFrame[fI]);
+				MGlobal::displayInfo("\n");
 			}
+			MGlobal::displayInfo("\n");
+			MGlobal::displayInfo("\n");
+			MGlobal::displayInfo("\n");
 		}
 		// ===========================================================================
+		file.close();
 	}
 	else
 	{
@@ -120,6 +167,8 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 
 			file << "} \n\n";
 		}		
+
+		file.close();
 	}
 
 
@@ -127,35 +176,39 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 }
 
 
-void MAF_Generator::SerializeJointFrameTransform(std::fstream& file, JointTransform& transform)
+void MAF_Generator::SerializeJointFrameTransform(std::ofstream& file, JointTransform& transform)
 {	
-	float posX = transform.position.x;
-	float posY = transform.position.y;
-	float posZ = transform.position.z;
-	file.write(reinterpret_cast<const char*>(&posX), sizeof(float));
-	file.write(reinterpret_cast<const char*>(&posY), sizeof(float));
-	file.write(reinterpret_cast<const char*>(&posZ), sizeof(float));
+	float posX = (float)transform.position.x;
+	float posY = (float)transform.position.y;
+	float posZ = (float)transform.position.z;
+	Print("Position ", posX, posY, posZ);
+	file.write(reinterpret_cast<char*>(&posX), sizeof(float));
+	file.write(reinterpret_cast<char*>(&posY), sizeof(float));
+	file.write(reinterpret_cast<char*>(&posZ), sizeof(float));
 
-	float rotX = transform.rotation.x;
-	float rotY = transform.rotation.y;
-	float rotZ = transform.rotation.z;
-	float rotW = transform.rotation.w;
-	file.write(reinterpret_cast<const char*>(&rotX), sizeof(float));
-	file.write(reinterpret_cast<const char*>(&rotY), sizeof(float));
-	file.write(reinterpret_cast<const char*>(&rotZ), sizeof(float));
-	file.write(reinterpret_cast<const char*>(&rotW), sizeof(float));		
+	float rotX = (float)transform.rotation.x;
+	float rotY = (float)transform.rotation.y;
+	float rotZ = (float)transform.rotation.z;
+	float rotW = (float)transform.rotation.w;
+	Print("Rotation ", rotX, rotY, rotZ);
+	file.write(reinterpret_cast<char*>(&rotX), sizeof(float));
+	file.write(reinterpret_cast<char*>(&rotY), sizeof(float));
+	file.write(reinterpret_cast<char*>(&rotZ), sizeof(float));
+	file.write(reinterpret_cast<char*>(&rotW), sizeof(float));		
+	
+	float scaX = (float)transform.scale.x;
+	float scaY = (float)transform.scale.y;
+	float scaZ = (float)transform.scale.z;		
+	Print("Scale ", scaX, scaY, scaZ);
+	file.write(reinterpret_cast<char*>(&scaX), sizeof(float));		
+	file.write(reinterpret_cast<char*>(&scaY), sizeof(float));		
+	file.write(reinterpret_cast<char*>(&scaZ), sizeof(float));		
 
-	float scaX = transform.scale.x;
-	float scaY = transform.scale.y;
-	float scaZ = transform.scale.z;		
-	file.write(reinterpret_cast<const char*>(&scaX), sizeof(float));		
-	file.write(reinterpret_cast<const char*>(&scaY), sizeof(float));		
-	file.write(reinterpret_cast<const char*>(&scaZ), sizeof(float));		
-
-	float shrX = transform.shear.x;
-	float shrY = transform.shear.y;
-	float shrZ = transform.shear.z;	
-	file.write(reinterpret_cast<const char*>(&shrX), sizeof(float));		
-	file.write(reinterpret_cast<const char*>(&shrY), sizeof(float));		
-	file.write(reinterpret_cast<const char*>(&shrZ), sizeof(float));
+	float shrX = (float)transform.shear.x;
+	float shrY = (float)transform.shear.y;
+	float shrZ = (float)transform.shear.z;	
+	Print("Shear ", shrX, shrY, shrZ);
+	file.write(reinterpret_cast<char*>(&shrX), sizeof(float));		
+	file.write(reinterpret_cast<char*>(&shrY), sizeof(float));		
+	file.write(reinterpret_cast<char*>(&shrZ), sizeof(float));
 }

@@ -198,9 +198,6 @@ MStatus MAF_Helper::GetTransform(MFnIkJoint& joint, JointTransform& transform)
 	
 	status = joint.getRotation(transform.rotation);
 	if (status == MStatus::kFailure)  { Print("Failed to retrieve Quaternion information."); }
-
-	status = joint.getRotation(transform.eulerRotation);
-	if (status == MStatus::kFailure) { Print("Failed to retrieve Euler information."); }
 	
 	double scale[3];
 	status = joint.getScale(scale);
@@ -232,9 +229,7 @@ MStatus MAF_Helper::GetTransformInFrameX(MFnIkJoint& joint, JointTransform& tran
 	status = joint.getRotation(transform.rotation);
 	if (status == MStatus::kFailure) { Print("Failed to retrieve Quaternion information."); }
 
-	status = joint.getRotation(transform.eulerRotation);
-	if (status == MStatus::kFailure) { Print("Failed to retrieve Euler information."); }
-
+	
 	double scale[3];
 	status = joint.getScale(scale);
 	if (status == MStatus::kFailure) { Print("Failed to retrieve scale information."); }

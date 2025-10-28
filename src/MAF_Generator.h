@@ -16,6 +16,6 @@ namespace MAF_Generator
 	MStatus ExportAnimation(std::string& path, std::string& format, bool deduplicate);
 	MStatus WriteFile(std::string& path, std::string& format, Root& root, std::vector<Joint>& finalJoints);
 
-	void SerializeJointFrameTransform(std::fstream& file, JointTransform& transform);
+	void SerializeJointFrameTransform(std::ofstream& file, JointTransform& transform);
 
 }

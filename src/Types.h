@@ -22,8 +22,7 @@ enum Type
 
 struct JointTransform
 {
-    MVector        position;
-    MEulerRotation eulerRotation;
+    MVector        position;    
     MQuaternion    rotation;
     MVector        scale;
     MVector        shear;
@@ -37,7 +36,6 @@ struct Root
 
 struct Joint
 {
-    // @note Just an int. It needs to have -1 if the parent bone is the root
     int              parentID;    
     int              influenceID;
     std::vector<int> childrenIDs;

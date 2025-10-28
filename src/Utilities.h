@@ -20,6 +20,15 @@ inline void Print(MString message, T t)
 	MGlobal::displayInfo(message);
 }
 
+inline void Print(MString message, float a, float b, float c)
+{
+	message += a;
+	message += ", ";
+	message += b;
+	message += ", ";
+	message += c;
+	MGlobal::displayInfo(message);
+}
 
 
 inline MStatus Print(MString message, MStatus& status)

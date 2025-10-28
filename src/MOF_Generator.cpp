@@ -194,7 +194,7 @@ MStatus MOF_Generator::ExportMesh(std::string& path, std::string& format, bool d
 
 void MOF_Generator::WriteFile(std::vector<Vertex>& finalVertices, std::vector<int>& indices, std::vector<Joint> skeleton, Root& root, std::string& path, std::string& format, Type meshType)
 {	
-	std::fstream file;
+	std::ofstream file;
     MFnIkJoint   rootJnt(root.rootObj);
 
 	if (!format.compare("Binary"))
@@ -392,7 +392,7 @@ void MOF_Generator::WriteFile(std::vector<Vertex>& finalVertices, std::vector<in
 }
 
 
-void MOF_Generator::WriteJoint(std::fstream& file, Joint& joint)
+void MOF_Generator::WriteJoint(std::ofstream& file, Joint& joint)
 {
     MFnIkJoint     mJoint = joint.GetThisJoint();
     JointTransform transform{};
@@ -457,7 +457,7 @@ void MOF_Generator::WriteJoint(std::fstream& file, Joint& joint)
 }
 
 
-void MOF_Generator::WriteRoot(std::fstream& file, Root& root)
+void MOF_Generator::WriteRoot(std::ofstream& file, Root& root)
 {    
     MFnIkJoint rootJnt(root.rootObj);
     JointTransform transform{};
