@@ -65,11 +65,7 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 		// Serialize
 		//
 		for (unsigned int fI = 0; fI <= endFrame.value(); fI++)
-		{	
-			MString message = "Frame ";
-			message += fI;
-			MGlobal::displayError(message);
-
+		{				
 			// The root always first
 			JointTransform rootTransform;
 			MAF_Helper::GetTransformInFrameX(root, rootTransform, fI);
@@ -77,53 +73,10 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 			 
 			// And then each joint
 			for (unsigned int jI = 0; jI < finalJoints.size(); jI++)
-			{
-				JointTransform transform;
-				MFnIkJoint j = finalJoints[jI].GetThisJoint();
-				MAF_Helper::GetTransformInFrameX(j, transform, fI);
-
-				float posX = (float)transform.position.x;
-				float posY = (float)transform.position.y;
-				float posZ = (float)transform.position.z;
-				
-				file.write(reinterpret_cast<char*>(&posX), sizeof(float));
-				file.write(reinterpret_cast<char*>(&posY), sizeof(float));
-				file.write(reinterpret_cast<char*>(&posZ), sizeof(float));
-
-			 
-				float rotX = transform.rotation.x;
-				float rotY = transform.rotation.y;
-				float rotZ = transform.rotation.z;
-				float rotW = transform.rotation.w;
-				// Print("Rotation ", rotX, rotY, rotZ);
-				file.write(reinterpret_cast<char*>(&rotX), sizeof(float));
-				file.write(reinterpret_cast<char*>(&rotY), sizeof(float));
-				file.write(reinterpret_cast<char*>(&rotZ), sizeof(float));
-				file.write(reinterpret_cast<char*>(&rotW), sizeof(float));
-		 
-				float scaX = (float)transform.scale.x;
-				float scaY = (float)transform.scale.y;
-				float scaZ = (float)transform.scale.z;
-				// Print("Scale ", scaX, scaY, scaZ);
-				file.write(reinterpret_cast<char*>(&scaX), sizeof(float));
-				file.write(reinterpret_cast<char*>(&scaY), sizeof(float));
-				file.write(reinterpret_cast<char*>(&scaZ), sizeof(float));
-
-				float shrX = (float)transform.shear.x;
-				float shrY = (float)transform.shear.y;
-				float shrZ = (float)transform.shear.z;
-				// Print("Shear ", shrX, shrY, shrZ);
-				file.write(reinterpret_cast<char*>(&shrX), sizeof(float));
-				file.write(reinterpret_cast<char*>(&shrY), sizeof(float));
-				file.write(reinterpret_cast<char*>(&shrZ), sizeof(float));
-
-
-				// SerializeJointFrameTransform(file, finalJoints[jI].transformPerFrame[fI]);
-				MGlobal::displayInfo("\n");
+			{			
+				SerializeJointFrameTransform(file, finalJoints[jI].transformPerFrame[fI]);	 
 			}
-			MGlobal::displayInfo("\n");
-			MGlobal::displayInfo("\n");
-			MGlobal::displayInfo("\n");
+ 
 		}
 		// ===========================================================================
 		file.close();
@@ -145,9 +98,7 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 
 			file << "\n\t{\n";
 			file << "\t\tPosition [ " << transform.position.x << ", " << transform.position.y << ", " << transform.position.z << " ]\n";
-			file << "\t\tRotation [ " << transform.rotation.x << ", " << transform.rotation.y << ", " << transform.rotation.z << ", " << transform.rotation.w << " ]\n";
-			// file << "\t\tRotation [ " << transform.eulerRotation.x << ", " << transform.eulerRotation.y << ", " << transform.eulerRotation.z << " ] <-- Euler (Radians)\n";
-			// file << "\t\tRotation [ " << transform.eulerRotation.x * (180 / (float)3.1415926535f) << ", " << transform.eulerRotation.y * (180 / (float)3.1415926535f) << ", " << transform.eulerRotation.z * (180 / (float)3.1415926535f) << " ] <-- Euler (Degrees)\n";
+			file << "\t\tRotation [ " << transform.rotation.x << ", " << transform.rotation.y << ", " << transform.rotation.z << ", " << transform.rotation.w << " ]\n";			
 			file << "\t\tScale    [ " << transform.scale.x << ", " << transform.scale.y << ", " << transform.scale.z << " ]\n";
 			file << "\t\tShear    [ " << transform.shear.x << ", " << transform.shear.y << ", " << transform.shear.z << " ]\n";
 			file << "\t} \n";
@@ -157,9 +108,7 @@ MStatus MAF_Generator::WriteFile(std::string& path, std::string& format, Root& r
 				JointTransform transform = finalJoints[jointIdx].transformPerFrame[cFrame];
 				file << "\n\t{\n";
 				file << "\t\tPosition [ " << transform.position.x << ", " << transform.position.y << ", " << transform.position.z << " ]\n";								
-				file << "\t\tRotation [ " << transform.rotation.x << ", " << transform.rotation.y << ", " << transform.rotation.z << ", " << transform.rotation.w << " ]\n";
-				// file << "\t\tRotation [ " << transform.eulerRotation.x << ", " << transform.eulerRotation.y << ", " << transform.eulerRotation.z << " ] <-- Euler (Radians)\n";
-				// file << "\t\tRotation [ " << transform.eulerRotation.x * (180 / (float)3.1415926535f) << ", " << transform.eulerRotation.y * (180 / (float)3.1415926535f) << ", " << transform.eulerRotation.z * (180 / (float)3.1415926535f) << " ] <-- Euler (Degrees)\n";
+				file << "\t\tRotation [ " << transform.rotation.x << ", " << transform.rotation.y << ", " << transform.rotation.z << ", " << transform.rotation.w << " ]\n";				
 				file << "\t\tScale    [ " << transform.scale.x << ", " << transform.scale.y << ", " << transform.scale.z << " ]\n";
 				file << "\t\tShear    [ " << transform.shear.x << ", " << transform.shear.y << ", " << transform.shear.z << " ]\n";
 				file << "\t} \n";
@@ -181,7 +130,7 @@ void MAF_Generator::SerializeJointFrameTransform(std::ofstream& file, JointTrans
 	float posX = (float)transform.position.x;
 	float posY = (float)transform.position.y;
 	float posZ = (float)transform.position.z;
-	Print("Position ", posX, posY, posZ);
+	
 	file.write(reinterpret_cast<char*>(&posX), sizeof(float));
 	file.write(reinterpret_cast<char*>(&posY), sizeof(float));
 	file.write(reinterpret_cast<char*>(&posZ), sizeof(float));
@@ -190,7 +139,7 @@ void MAF_Generator::SerializeJointFrameTransform(std::ofstream& file, JointTrans
 	float rotY = (float)transform.rotation.y;
 	float rotZ = (float)transform.rotation.z;
 	float rotW = (float)transform.rotation.w;
-	Print("Rotation ", rotX, rotY, rotZ);
+	
 	file.write(reinterpret_cast<char*>(&rotX), sizeof(float));
 	file.write(reinterpret_cast<char*>(&rotY), sizeof(float));
 	file.write(reinterpret_cast<char*>(&rotZ), sizeof(float));
@@ -199,7 +148,7 @@ void MAF_Generator::SerializeJointFrameTransform(std::ofstream& file, JointTrans
 	float scaX = (float)transform.scale.x;
 	float scaY = (float)transform.scale.y;
 	float scaZ = (float)transform.scale.z;		
-	Print("Scale ", scaX, scaY, scaZ);
+	
 	file.write(reinterpret_cast<char*>(&scaX), sizeof(float));		
 	file.write(reinterpret_cast<char*>(&scaY), sizeof(float));		
 	file.write(reinterpret_cast<char*>(&scaZ), sizeof(float));		
@@ -207,7 +156,7 @@ void MAF_Generator::SerializeJointFrameTransform(std::ofstream& file, JointTrans
 	float shrX = (float)transform.shear.x;
 	float shrY = (float)transform.shear.y;
 	float shrZ = (float)transform.shear.z;	
-	Print("Shear ", shrX, shrY, shrZ);
+	
 	file.write(reinterpret_cast<char*>(&shrX), sizeof(float));		
 	file.write(reinterpret_cast<char*>(&shrY), sizeof(float));		
 	file.write(reinterpret_cast<char*>(&shrZ), sizeof(float));
