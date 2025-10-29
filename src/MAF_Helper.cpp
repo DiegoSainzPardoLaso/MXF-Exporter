@@ -194,20 +194,44 @@ MStatus MAF_Helper::GetTransform(MFnIkJoint& joint, JointTransform& transform)
 	MStatus status;	
 	
 	transform.position = joint.getTranslation(MSpace::kTransform, &status);
-	if (status == MStatus::kFailure)  { Print("Failed to retrieve position information.");  }
+	if (status == MStatus::kFailure)  
+	{
+		MString message = "GT - Failed to retrieve position information. [ ";
+		message += joint.name();
+		message += " ]";
+		Print(message);
+	}
 	
 	status = joint.getRotation(transform.rotation);
-	if (status == MStatus::kFailure)  { Print("Failed to retrieve Quaternion information."); }
+	if (status == MStatus::kFailure)  
+	{
+		MString message = "GT - Failed to retrieve Rotation information. [ ";
+		message += joint.name();
+		message += " ]";
+		Print(message);
+	}
 	
 	double scale[3];
 	status = joint.getScale(scale);
-	if (status == MStatus::kFailure) { Print("Failed to retrieve scale information."); }
+	if (status == MStatus::kFailure) 
+	{
+		MString message = "GT - Failed to retrieve scale information. [ ";
+		message += joint.name();
+		message += " ]";
+		Print(message);
+	}
 	MVector vScale(scale[0], scale[1], scale[2]);
 	transform.scale = vScale;
 
 	double shear[3];
 	status = joint.getShear(shear);
-	if (status == MStatus::kFailure)  { Print("Failed to retrieve shear information."); }
+	if (status == MStatus::kFailure)  
+	{
+		MString message = "GT - Failed to retrieve shear information. [ ";
+		message += joint.name();
+		message += " ]";
+		Print(message);
+	}
 	MVector vShear(shear[0], shear[1], shear[2]);
 	transform.shear = vShear;
 	
@@ -224,21 +248,45 @@ MStatus MAF_Helper::GetTransformInFrameX(MFnIkJoint& joint, JointTransform& tran
 	MStatus status;
 
 	transform.position = joint.getTranslation(MSpace::kTransform, &status);
-	if (status == MStatus::kFailure) { Print("Failed to retrieve position information."); }
+	if (status == MStatus::kFailure) 
+	{
+		MString message = "GTX - Failed to retrieve position information. [ ";
+		message += joint.name();
+		message += " ]";
+		Print(message); 
+	}
 
 	status = joint.getRotation(transform.rotation);
-	if (status == MStatus::kFailure) { Print("Failed to retrieve Quaternion information."); }
+	if (status == MStatus::kFailure) 
+	{
+		MString message = "GTX - Failed to retrieve Rotation information. [ ";
+		message += joint.name();
+		message += " ]";
+		Print(message);
+	}
 
 	
 	double scale[3];
 	status = joint.getScale(scale);
-	if (status == MStatus::kFailure) { Print("Failed to retrieve scale information."); }
+	if (status == MStatus::kFailure) 
+	{
+		MString message = "GTX - Failed to retrieve scale information. [ ";
+		message += joint.name();
+		message += " ]";
+		Print(message);
+	}
 	MVector vScale(scale[0], scale[1], scale[2]);
 	transform.scale = vScale;
 
 	double shear[3];
 	status = joint.getShear(shear);
-	if (status == MStatus::kFailure) { Print("Failed to retrieve shear information."); }
+	if (status == MStatus::kFailure) 
+	{
+		MString message = "GTX - Failed to retrieve shear information. [ ";
+		message += joint.name();
+		message += " ]";
+		Print(message);
+	}
 	MVector vShear(shear[0], shear[1], shear[2]);
 	transform.shear = vShear;
 

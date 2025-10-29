@@ -154,6 +154,8 @@ MStatus MOF_Generator::ExportMesh(std::string& path, std::string& format, bool d
     // Assign the influence IDs and their respective weights
     // ==========================================================================================================   
 
+    MGlobal::displayInfo("NAN");
+
     for (size_t fvIdx = 0; fvIdx < finalVertices.size(); fvIdx++)
     {
         for (size_t wIdvIdx = 0; wIdvIdx < verticesWithWeightsAndIDs.size(); wIdvIdx++)
@@ -241,10 +243,14 @@ void MOF_Generator::WriteFile(std::vector<Vertex>& finalVertices, std::vector<in
 
             if (meshType == Type::Animated)
             {
-			    file.write(reinterpret_cast<char*>(&tmpVertex.jointID[0] + 1), sizeof(int));
-			    file.write(reinterpret_cast<char*>(&tmpVertex.jointID[1] + 1), sizeof(int));
-			    file.write(reinterpret_cast<char*>(&tmpVertex.jointID[2] + 1), sizeof(int));
-			    file.write(reinterpret_cast<char*>(&tmpVertex.jointID[3] + 1), sizeof(int));
+                float nIdx0 = (tmpVertex.jointID[0] + 1);
+                float nIdx1 = (tmpVertex.jointID[1] + 1);
+                float nIdx2 = (tmpVertex.jointID[2] + 1);
+                float nIdx3 = (tmpVertex.jointID[3] + 1);
+			    file.write(reinterpret_cast<char*>(&nIdx0), sizeof(float));
+			    file.write(reinterpret_cast<char*>(&nIdx1), sizeof(float));
+			    file.write(reinterpret_cast<char*>(&nIdx2), sizeof(float));
+			    file.write(reinterpret_cast<char*>(&nIdx3), sizeof(float));
             
                 file.write(reinterpret_cast<char*>(&tmpVertex.weight[0]), sizeof(float));
                 file.write(reinterpret_cast<char*>(&tmpVertex.weight[1]), sizeof(float));

@@ -3,7 +3,7 @@
 
 // @note Influences and weights are retrieved in an ordered way.
 // So, to confirm this I have a 12 vertices mesh drived by 5 influence objects (joints)
-// If I open the 'Component Editor' and go to the smooth Skins tab this is what I see.
+// If I open the 'Component Editor' and go to the smooth Skins tab this is what I see (I need to be in vertex mode to load the components).
 //           joint_1     joint_2     joint_2_end     joint_3     joint_3_end     
 // Vtx [0]   0.74010     0.15400     0.010000000     0.09500     0.000000000
 // Vtx [1]   .......     .......     ...........     .......     ...........   
