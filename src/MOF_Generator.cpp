@@ -247,10 +247,10 @@ void MOF_Generator::WriteFile(std::vector<Vertex>& finalVertices, std::vector<in
                 float nIdx1 = (tmpVertex.jointID[1] + 1);
                 float nIdx2 = (tmpVertex.jointID[2] + 1);
                 float nIdx3 = (tmpVertex.jointID[3] + 1);
-			    file.write(reinterpret_cast<char*>(&nIdx0), sizeof(float));
-			    file.write(reinterpret_cast<char*>(&nIdx1), sizeof(float));
-			    file.write(reinterpret_cast<char*>(&nIdx2), sizeof(float));
-			    file.write(reinterpret_cast<char*>(&nIdx3), sizeof(float));
+			    file.write(reinterpret_cast<char*>(&nIdx0), sizeof(int));
+			    file.write(reinterpret_cast<char*>(&nIdx1), sizeof(int));
+			    file.write(reinterpret_cast<char*>(&nIdx2), sizeof(int));
+			    file.write(reinterpret_cast<char*>(&nIdx3), sizeof(int));
             
                 file.write(reinterpret_cast<char*>(&tmpVertex.weight[0]), sizeof(float));
                 file.write(reinterpret_cast<char*>(&tmpVertex.weight[1]), sizeof(float));
