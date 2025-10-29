@@ -243,10 +243,10 @@ void MOF_Generator::WriteFile(std::vector<Vertex>& finalVertices, std::vector<in
 
             if (meshType == Type::Animated)
             {
-                float nIdx0 = (tmpVertex.jointID[0] + 1);
-                float nIdx1 = (tmpVertex.jointID[1] + 1);
-                float nIdx2 = (tmpVertex.jointID[2] + 1);
-                float nIdx3 = (tmpVertex.jointID[3] + 1);
+                int nIdx0 = (tmpVertex.jointID[0] + 1);
+                int nIdx1 = (tmpVertex.jointID[1] + 1);
+                int nIdx2 = (tmpVertex.jointID[2] + 1);
+                int nIdx3 = (tmpVertex.jointID[3] + 1);
 			    file.write(reinterpret_cast<char*>(&nIdx0), sizeof(int));
 			    file.write(reinterpret_cast<char*>(&nIdx1), sizeof(int));
 			    file.write(reinterpret_cast<char*>(&nIdx2), sizeof(int));
