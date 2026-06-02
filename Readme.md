@@ -1,4 +1,4 @@
-##Custom File Format Exporter for Maya
+#Custom File Format Exporter for Maya
 
 It writes mesh and animation data in an easy to read binary file.
 
